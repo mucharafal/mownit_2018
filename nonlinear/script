@@ -1,0 +1,35 @@
+#!/bin/bash
+
+rm output_*
+./compile
+
+STRING_INPUT="input_"
+STRING_OUTPUT="output_"
+
+while read stop_method; do
+    while read epsilon; do
+        POSTFIX="$stop_method"
+        POSTFIX+="_"
+        POSTFIX+="$epsilon"
+        OUTPUT_FILE_NAME="$STRING_OUTPUT$POSTFIX"
+        while read start_point1; do
+            while read start_point2; do
+                    POSTFIX="$stop_method"
+                    POSTFIX+="_"
+                    POSTFIX+="$epsilon"
+                    POSTFIX+="_"
+                    POSTFIX+="$start_point1"
+                    POSTFIX+="_"
+                    POSTFIX+="$start_point2"
+                    INPUT_FILE_NAME="$STRING_INPUT$POSTFIX"
+                    echo "$stop_method
+                    $epsilon
+                    $start_point1
+                    $start_point2
+                    " > $INPUT_FILE_NAME
+                    ./nonlinear < $INPUT_FILE_NAME >> $OUTPUT_FILE_NAME
+                    rm $INPUT_FILE_NAME
+            done < start_point2s
+        done < start_point1s
+    done < epsilons
+done < stop_methods
